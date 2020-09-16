@@ -66,36 +66,51 @@ namespace SMS_Service
         /// </summary>
         /// <param name="registeredTagLists"></param>
         /// <returns></returns>
-        private static bool RegisterINSqlServer(List<RegisteredTagList> registeredTagLists)
+        public static bool RegisterINSqlServer(List<RegisteredTagList> registeredTagLists)
         {
-            using (var connSQL = new SqlConnection("data source=10.1.1.4;initial catalog=infraBase ;user id=sa;password=Ss987654;MultipleActiveResultSets=True;"))
+            var connString =
+                $"data source=localhost;initial catalog=infraBase ;user id=sa;password=Ss987654;MultipleActiveResultSets=True;";
+            try
             {
-                try
+                using (var connection =new SqlConnection(connString))
                 {
-                    connSQL.Open();
-                    foreach (var item in registeredTagLists)
+                    connection.Open();
+                    using (var trans = connection.BeginTransaction())
                     {
-                        var str =
-                            $"insert into tagRec(TagID,DateTimeRegister,MysqlID) Values('{item.Tagid}','{item.dateRegister.Date}','{item.ID}')";
-                        var cmd = new SqlCommand(str, connSQL);
-                        var resly = cmd.ExecuteNonQuery();
+                        var command = connection.CreateCommand();
+                        command.Transaction = trans;
+                        try
+                        {
+                            foreach (var item in registeredTagLists)
+                            {
+                                command.CommandText =
+                                    $"insert into tagRec(TagID,DateTimeRegister,MysqlID) Values('{item.Tagid}','{item.dateRegister.Date}','{item.ID}')";
+                                command.ExecuteNonQuery();
+                            }
+
+                            trans.Commit();
+                            return true;
+                        }
+                        catch
+                        {
+                            trans.Rollback();
+                            return false;
+                        }
                     }
-                    connSQL.Close();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    var str = ex.Message;
-                    connSQL.Close();
-                    return false;
                 }
             }
-
-
+            catch
+            {
+                return false;
+            }
         }
-        private static List<RegisteredTagList> ReaderSQL()
+        /// <summary>
+        /// خواندن ثبت جدید از بانک مای اس کیوال
+        /// </summary>
+        /// <returns></returns>
+        public static List<RegisteredTagList> ReaderSQL()
         {
-            string cs = @"server=10.1.1.3;port=3306;userid=fm;password=Ss987654;database=schooldb;SSL Mode = None";
+            string cs = @"server=localhost;port=3306;userid=fm;password=Ss987654;database=schooldb;SSL Mode = None";
             var list = new List<RegisteredTagList>();
             using (var conn = new MySqlConnection(cs))
             {

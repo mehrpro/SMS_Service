@@ -22,7 +22,7 @@ namespace SMS_Service
         protected override void OnStart(string[] args)
         {
             _timer = new Timer();
-            this._timer.Interval = 300; // every 30 Secs
+            this._timer.Interval = 1000; // every 30 Secs
             this._timer.Elapsed += new System.Timers.ElapsedEventHandler(this._timer_Tick);
             _timer.Enabled = true;
             SvcProcess.WriteMessageLog("Start Service");
@@ -30,7 +30,17 @@ namespace SMS_Service
 
         private void _timer_Tick(object sender, ElapsedEventArgs e)
         {
-            SvcProcess.WriteMessageLog("Start Service Time");
+            try
+            {
+               var result = SvcProcess.RegisterINSqlServer(SvcProcess.ReaderSQL());
+               // send sms error Save
+            }
+            catch 
+            {
+               
+                // send sms Error Process
+            }
+           
         }
 
         protected override void OnStop()

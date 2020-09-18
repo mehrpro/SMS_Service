@@ -10,9 +10,13 @@ using MySql.Data.MySqlClient;
 
 namespace SMS_Service
 {
-    public static class SvcProcess
+    public  class SvcProcess
     {
-
+        private schooldbEntities db;
+        public SvcProcess()
+        {
+            db =new schooldbEntities();
+        }
         /// <summary>
         /// ثبت خطاهای سرویس
         /// </summary>
@@ -138,6 +142,11 @@ namespace SMS_Service
                     return null;
                 }
             }
+        }
+
+        public static void SmsSender()
+        {
+            
         }
 
     }

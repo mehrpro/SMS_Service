@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SMS_Service</RootNamespace>
     <AssemblyName>SMS_Service</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -91,6 +92,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DBModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="FarsiCalender.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="MySQLClass.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -104,7 +108,7 @@
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SendSMS.cs" />
-    <Compile Include="SMS_Sender.cs" />
+    <Compile Include="SMSSenderProcess.cs" />
     <Compile Include="SMS_Service.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -125,13 +129,11 @@
     <Compile Include="StudentTAG.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="svcProcess.cs" />
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="DatabaseTransFormerProcess.cs" />
     <Compile Include="Tag.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="TagList_Registered.cs" />
     <Compile Include="TagRecorder.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>

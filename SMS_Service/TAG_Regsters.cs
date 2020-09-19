@@ -62,7 +62,7 @@ namespace SMS_Service
         private List<string> AllTag()
         {
             var resultRemove = db.Tags.Select(x => x.TagID_HEX).ToList();
-            var qry = db.TagRecorders.Where(x => x.SMS == false || x.SMS == null).Select(x => x.TagID).ToList();
+            var qry = db.TagRecorders.Where(x => x.SMS == false ).Select(x => x.TagID).ToList();
             var result = RemoveDuplicates(qry);
             resultRemove.RemoveAll(item => result.Contains(item));
             return result;

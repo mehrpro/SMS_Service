@@ -5,16 +5,16 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="91928e7c2fcc49d8b94faba86510ef44" Name="Diagram1">
-        <EntityTypeShape EntityType="schooldbModel.AcademicYear" Width="1.5" PointX="3.75" PointY="8.875" />
-        <EntityTypeShape EntityType="schooldbModel.ClassLevel" Width="1.5" PointX="1.5" PointY="15.125" />
-        <EntityTypeShape EntityType="schooldbModel.ClassRoom" Width="1.5" PointX="3.75" PointY="14.75" />
+        <EntityTypeShape EntityType="schooldbModel.AcademicYear" Width="1.5" PointX="3.75" PointY="14.75" />
+        <EntityTypeShape EntityType="schooldbModel.ClassLevel" Width="1.5" PointX="1.5" PointY="9.25" />
+        <EntityTypeShape EntityType="schooldbModel.ClassRoom" Width="1.5" PointX="3.75" PointY="8.875" />
         <EntityTypeShape EntityType="schooldbModel.Registered" Width="1.5" PointX="6" PointY="4.25" />
         <EntityTypeShape EntityType="schooldbModel.School" Width="1.5" PointX="3.75" PointY="12" />
         <EntityTypeShape EntityType="schooldbModel.Student" Width="1.5" PointX="0.75" PointY="3.625" />
         <EntityTypeShape EntityType="schooldbModel.StudentTAG" Width="1.5" PointX="3" PointY="4.625" />
         <EntityTypeShape EntityType="schooldbModel.TagRecorder" Width="1.5" PointX="5.75" PointY="8.5" />
         <EntityTypeShape EntityType="schooldbModel.Tag" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="schooldbModel.User" Width="1.5" PointX="0.75" PointY="9.5" />
+        <EntityTypeShape EntityType="schooldbModel.User" Width="1.5" PointX="7.75" PointY="8.5" />
         <AssociationConnector Association="schooldbModel.FK_Registered_AcademicYears" />
         <AssociationConnector Association="schooldbModel.FK_ClassRooms_ClassLevels" />
         <AssociationConnector Association="schooldbModel.FK_Registered_ClassRooms" />

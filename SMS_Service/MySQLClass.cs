@@ -36,10 +36,10 @@ namespace SMS_Service
         /// خواندن ثبت جدید از بانک مای اس کیوال
         /// </summary>
         /// <returns></returns>
-        public static List<TagList_Registered> ReaderSQL()
+        public static List<View_TagList> ReaderSQL()
         {
             string cs = @"server=localhost;port=3306;userid=fm;password=Ss987654;database=schooldb;SSL Mode = None";
-            var list = new List<TagList_Registered>();
+            var list = new List<View_TagList>();
             using (var conn = new MySqlConnection(cs))
             {
                 try
@@ -50,7 +50,7 @@ namespace SMS_Service
                     var result = cmd.ExecuteReader();
                     while (result.Read())
                     {
-                        list.Add(new TagList_Registered()
+                        list.Add(new View_TagList()
                         {
                             ID = result.GetInt32(0),
                             Tag = result.GetString(1),

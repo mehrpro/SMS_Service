@@ -104,6 +104,7 @@
     <Compile Include="Registered.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RemoverDuplicate.cs" />
     <Compile Include="School.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -133,7 +134,7 @@
     <Compile Include="Tag.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="TagList_Registered.cs" />
+    <Compile Include="View_TagList.cs" />
     <Compile Include="TagRecorder.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>

@@ -5,7 +5,7 @@ namespace SMS_Service
     /// <summary>
     /// لیست تگ
     /// </summary>
-    public class TagList_Registered
+    public class View_TagList
     {
         public int ID { get; set; }
         public string Tag { get; set; }

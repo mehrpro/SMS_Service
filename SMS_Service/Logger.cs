@@ -9,15 +9,15 @@ namespace SMS_Service
         /// ثبت خطاهای سرویس
         /// </summary>
         /// <param name="ex">خطا</param>
-        public static async void WriteErrorLog(Exception ex)
+        public static void WriteErrorLog(Exception ex)
         {
             StreamWriter sw = null;
             try
             {
                 sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "\\LogFile.txt", true);
-                await sw.WriteLineAsync(DateTime.Now.ToString() + ": " + ex.Source.ToString().Trim() + "; " +
-                                        ex.Message.ToString().Trim());
-                await sw.FlushAsync();
+                sw.WriteLine(DateTime.Now + ": " + ex.Source.Trim() + "; " +
+                                       ex.Message.Trim());
+                sw.Flush();
                 sw.Close();
             }
             catch
@@ -29,14 +29,14 @@ namespace SMS_Service
         /// ثبت پیام های سرویس
         /// </summary>
         /// <param name="message">پیام</param>
-        public static async void WriteMessageLog(string message)
+        public static void WriteMessageLog(string message)
         {
             StreamWriter sw = null;
             try
             {
                 sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "\\MessageLog.txt", true);
-                await sw.WriteLineAsync(DateTime.Now.ToString() + ": " + message);
-                await sw.FlushAsync();
+                sw.WriteLine(DateTime.Now + ": " + message);
+                sw.Flush();
                 sw.Close();
             }
             catch
@@ -48,14 +48,29 @@ namespace SMS_Service
         /// خطاهای عدم ذخیره در بانک اطلاعاتی
         /// </summary>
         /// <param name="message"></param>
-        public static async void WriteErrorSaveToDatabase(string message)
+        public static void WriteErrorSaveToDatabase(string message)
         {
             StreamWriter sw = null;
             try
             {
                 sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "\\MessageLog.txt", true);
-                await sw.WriteLineAsync(DateTime.Now.Convert_PersianCalender() + ": " + message);
-                await sw.FlushAsync();
+                sw.WriteLine(DateTime.Now.Convert_PersianCalender() + ": " + message);
+                sw.Flush();
+                sw.Close();
+            }
+            catch
+            {
+                // igroned
+            }
+        }
+        public static void WriteMessageSenderLog(string message)
+        {
+            StreamWriter sw = null;
+            try
+            {
+                sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "\\MessageSenderLog.txt", true);
+                sw.WriteLine(DateTime.Now.Convert_PersianCalender() + ": " + message);
+                sw.Flush();
                 sw.Close();
             }
             catch

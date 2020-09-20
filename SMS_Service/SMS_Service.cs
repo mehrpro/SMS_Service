@@ -13,8 +13,7 @@ namespace SMS_Service
 {
     public partial class SMS_Service : ServiceBase
     {
-        private Timer _timerTransformer = null;
-        private Timer _timerSMSSender = null;
+        private Timer _timerTransformer;
         private SMSSenderProcess SmsSenderProcess;
         public SMS_Service()
         {
@@ -28,7 +27,7 @@ namespace SMS_Service
             _timerTransformer.Elapsed += new System.Timers.ElapsedEventHandler(this._timerTransFormer_Tick);
             _timerTransformer.Enabled = true;
             Logger.WriteMessageLog(" Start Service");
-            SmsSenderProcess = new SMSSenderProcess();
+          
             Logger.WriteMessageLog(" Start SMS Service");
 
         }
@@ -37,13 +36,14 @@ namespace SMS_Service
 
         private void _timerTransFormer_Tick(object sender, ElapsedEventArgs e)
         {
+            SmsSenderProcess = new SMSSenderProcess();
             DatabaseTransFormerProcess.TransformDataBase();// انتقال داده های بین دو سرور
             SmsSenderProcess.SMSSender();// پردازش . ارسال پیامک ها
         }
 
         protected override void OnStop()
         {
-            _timerTransformer.Enabled = _timerSMSSender.Enabled = false;
+            _timerTransformer.Enabled = false;
             Logger.WriteMessageLog("All Service Stopped");
             //send sms
         }

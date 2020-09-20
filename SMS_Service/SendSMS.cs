@@ -8,7 +8,7 @@ namespace SMS_Service
 
   public static class SendSMS
     {
-        public static int ID { get; set; }
+        
         /// <summary>
         /// ارسال ورود دانش آموز 
         /// </summary>
@@ -16,12 +16,11 @@ namespace SMS_Service
         /// <param name="fullName">نام کامل</param>
         /// <param name="inDate">تاریخ وساعت</param>
         /// <returns></returns>
-        public  static void SendInput(long mobile,string fullName,string inDate)
+        public  static void SendInput(long mobile,string fullName,string inDate,int id)
         {
             try
             {
                 var token = new Token().GetToken("17413e1864890dd130c73e17", "Fm&)**)!@(*");
-
                 var ultraFastSend = new UltraFastSend()
                 {
                     Mobile = mobile,
@@ -32,13 +31,12 @@ namespace SMS_Service
                         new UltraFastParameters() {Parameter = "InDate",ParameterValue = inDate}
                     }.ToArray()
                 };
-       
                 var ultraFastSendRespone = new UltraFast().Send(token, ultraFastSend);
                 if (ultraFastSendRespone.IsSuccessful)
                 {
                     using (var dbx = new schooldbEntities())
                     {
-                        var find = dbx.TagRecorders.Find(ID);
+                        var find = dbx.TagRecorders.Find(id);
                         find.SMS = true;
                         var resultSave = dbx.SaveChanges();
                         Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send Input {mobile}" : $"Not Send Input {mobile}");
@@ -49,7 +47,6 @@ namespace SMS_Service
             {
                 Logger.WriteErrorLog(e);
             }
-
         }
         /// <summary>
         /// ارسال خروج دانش آموز
@@ -58,7 +55,7 @@ namespace SMS_Service
         /// <param name="fullName">نام کامل</param>
         /// <param name="inDate">تاریخ و ساعت</param>
         /// <returns></returns>
-        public  static void SendOutput(long mobile, string fullName, string inDate)
+        public  static void SendOutput(long mobile, string fullName, string inDate,int id)
         {
             try
             {
@@ -79,21 +76,17 @@ namespace SMS_Service
                 {
                     using (var dbx = new schooldbEntities())
                     {
-                        var find = dbx.TagRecorders.Find(ID);
+                        var find = dbx.TagRecorders.Find(id);
                         find.SMS = true;
                         var resultSave = dbx.SaveChanges();
                         Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send Input {mobile}" : $"Not Send Input {mobile}");
                     }
-                   
                 }
-               
             }
             catch (Exception e)
             {
                 Logger.WriteErrorLog(e);
-                
             }
-
         }
     }
 }

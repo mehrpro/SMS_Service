@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SMS_Service
 {
-    public  class SMSSenderProcess
+    public class SMSSenderProcess
     {
         /// <summary>
         /// جستجوی شناسه تگ
@@ -67,7 +67,7 @@ namespace SMS_Service
         /// <summary>
         /// پردازش و ارسال پیامک تردد
         /// </summary>
-        public  void SMSSender()
+        public void SMSSender()
         {
             using (var db = new schooldbEntities())
             {
@@ -82,8 +82,6 @@ namespace SMS_Service
                         var resultTAG_ID = FindTagID(item, db); // retrun ID
                         if (FindTagIN_StudentTAG(resultTAG_ID, db))          // آیا این تگ  قابل استفاده است
                         {
-
-                  
                             var studentID = FindStudentIDByTagID(resultTAG_ID, db); // StudentID
                             var table = new List<TableTime>();
                             var counter = 0;
@@ -104,38 +102,29 @@ namespace SMS_Service
                                     mobile = sms,
                                 });
                             }
-
                             try
                             {
-                            
                                 foreach (var tableTime in table) //ارسال پیام تردد
                                 {
                                     if (tableTime.EvenODD % 2 == 0) //ورودی ها 
                                     {
-                                        Logger.WriteMessageLog("Step4");
+                                        Logger.WriteMessageLog("Input");
                                         if (tableTime.IsSendSMS == false)
-                                        {
-                                            SendSMS.ID = tableTime.ID;
-                                            SendSMS.SendInput(Convert.ToInt64(tableTime.mobile), tableTime.FullName, tableTime.DateRecord.Convert_PersianCalender()); //ارسال
-                                        }
+                                            SendSMS.SendInput(tableTime.mobile, tableTime.FullName,
+                                                tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
                                     }
                                     else
                                     {
-                                        Logger.WriteMessageLog("Step5");
+                                        Logger.WriteMessageLog("Output");
                                         if (tableTime.IsSendSMS == false)
-                                        {
-                                           SendSMS.ID = tableTime.ID;
-                                            SendSMS.SendOutput(Convert.ToInt64(tableTime.mobile), tableTime.FullName, tableTime.DateRecord.Convert_PersianCalender()); //ارسال
-                                        }
+                                            SendSMS.SendOutput(tableTime.mobile, tableTime.FullName,
+                                                tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
                                     }
-                              
                                 }
                             }
                             catch (Exception e)
                             {
-
                                 Logger.WriteErrorLog(e);
-
                             }
                         }
                     }
@@ -145,7 +134,6 @@ namespace SMS_Service
                     Logger.WriteMessageLog("Error Catch");
                     Logger.WriteErrorLog(e);
                 }
-
             }
         }
     }

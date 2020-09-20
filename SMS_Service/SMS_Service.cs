@@ -27,7 +27,6 @@ namespace SMS_Service
             _timerTransformer.Elapsed += new System.Timers.ElapsedEventHandler(this._timerTransFormer_Tick);
             _timerTransformer.Enabled = true;
             Logger.WriteMessageLog(" Start Service");
-          
             Logger.WriteMessageLog(" Start SMS Service");
 
         }

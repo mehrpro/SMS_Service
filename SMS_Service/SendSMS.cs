@@ -31,7 +31,9 @@ namespace SMS_Service
                         new UltraFastParameters() {Parameter = "InDate",ParameterValue = inDate}
                     }.ToArray()
                 };
-                var ultraFastSendRespone = new UltraFast().Send(token, ultraFastSend);
+                Thread.Sleep(1000);
+                Logger.WriteMessageLog("1000 milisecond");
+                UltraFastSendRespone ultraFastSendRespone = new UltraFast().Send(token, ultraFastSend);
                 if (ultraFastSendRespone.IsSuccessful)
                 {
                     using (var dbx = new schooldbEntities())
@@ -71,7 +73,9 @@ namespace SMS_Service
                     }.ToArray()
 
                 };
-                var ultraFastSendRespone = new UltraFast().Send(token, ultraFastSend);
+                Thread.Sleep(1000);
+                Logger.WriteMessageLog("1000 milisecond");
+                UltraFastSendRespone ultraFastSendRespone = new UltraFast().Send(token, ultraFastSend);
                 if (ultraFastSendRespone.IsSuccessful)
                 {
                     using (var dbx = new schooldbEntities())

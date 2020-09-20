@@ -6,9 +6,9 @@ using SmsIrRestful;
 namespace SMS_Service
 {
 
-  public  class SendSMS
+  public static class SendSMS
     {
-        public int ID { get; set; }
+        public static int ID { get; set; }
         /// <summary>
         /// ارسال ورود دانش آموز 
         /// </summary>
@@ -16,7 +16,7 @@ namespace SMS_Service
         /// <param name="fullName">نام کامل</param>
         /// <param name="inDate">تاریخ وساعت</param>
         /// <returns></returns>
-        public  bool SendInput(long mobile,string fullName,string inDate)
+        public  static void SendInput(long mobile,string fullName,string inDate)
         {
             try
             {
@@ -43,16 +43,11 @@ namespace SMS_Service
                         var resultSave = dbx.SaveChanges();
                         Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send Input {mobile}" : $"Not Send Input {mobile}");
                     }
-                    return true;
                 }
-                return false;
-
             }
             catch (Exception e)
             {
                 Logger.WriteErrorLog(e);
-                return false;
-
             }
 
         }
@@ -63,7 +58,7 @@ namespace SMS_Service
         /// <param name="fullName">نام کامل</param>
         /// <param name="inDate">تاریخ و ساعت</param>
         /// <returns></returns>
-        public  bool SendOutput(long mobile, string fullName, string inDate)
+        public  static void SendOutput(long mobile, string fullName, string inDate)
         {
             try
             {
@@ -89,14 +84,14 @@ namespace SMS_Service
                         var resultSave = dbx.SaveChanges();
                         Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send Input {mobile}" : $"Not Send Input {mobile}");
                     }
-                    return true;
+                   
                 }
-                return false;
+               
             }
             catch (Exception e)
             {
                 Logger.WriteErrorLog(e);
-                return false;
+                
             }
 
         }

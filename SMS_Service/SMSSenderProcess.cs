@@ -107,7 +107,7 @@ namespace SMS_Service
 
                             try
                             {
-                                var smsSender = new SendSMS();
+                            
                                 foreach (var tableTime in table) //ارسال پیام تردد
                                 {
                                     if (tableTime.EvenODD % 2 == 0) //ورودی ها 
@@ -115,19 +115,8 @@ namespace SMS_Service
                                         Logger.WriteMessageLog("Step4");
                                         if (tableTime.IsSendSMS == false)
                                         {
-                                          
-                                            var result = smsSender.SendInput(Convert.ToInt64(tableTime.mobile), tableTime.FullName, tableTime.DateRecord.Convert_PersianCalender()); //ارسال
-                                            if (result)
-                                            {
-                                                //var find = db.TagRecorders.Find(tableTime.ID);
-                                                //find.SMS = true;
-                                                //var resultSave = db.SaveChanges();
-                                                //Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send Input {tableTime.mobile}" : $"Not Send Input {tableTime.mobile}");
-                                            }
-                                            else
-                                            {
-                                                Logger.WriteMessageLog("No send");
-                                            }
+                                            SendSMS.ID = tableTime.ID;
+                                            SendSMS.SendInput(Convert.ToInt64(tableTime.mobile), tableTime.FullName, tableTime.DateRecord.Convert_PersianCalender()); //ارسال
                                         }
                                     }
                                     else
@@ -135,18 +124,8 @@ namespace SMS_Service
                                         Logger.WriteMessageLog("Step5");
                                         if (tableTime.IsSendSMS == false)
                                         {
-                                            var result = smsSender.SendOutput(Convert.ToInt64(tableTime.mobile), tableTime.FullName, tableTime.DateRecord.Convert_PersianCalender()); //ارسال
-                                            if (result)
-                                            {
-                                                //var find = db.TagRecorders.Find(tableTime.ID);
-                                                //find.SMS = true;
-                                                //var resultSave = db.SaveChanges();
-                                                //Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send Input {tableTime.mobile}" : $"Not Send Input {tableTime.mobile}");
-                                            }
-                                            else
-                                            {
-                                                Logger.WriteMessageLog("No send");
-                                            }
+                                           SendSMS.ID = tableTime.ID;
+                                            SendSMS.SendOutput(Convert.ToInt64(tableTime.mobile), tableTime.FullName, tableTime.DateRecord.Convert_PersianCalender()); //ارسال
                                         }
                                     }
                               

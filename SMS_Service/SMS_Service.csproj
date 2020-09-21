@@ -128,7 +128,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DBModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="FarsiCalender.cs" />
+    <Compile Include="ExtentionMethod.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MySQLClass.cs" />
     <Compile Include="ProjectInstaller.cs">
@@ -141,6 +141,7 @@
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RemoverDuplicate.cs" />
+    <Compile Include="RemoverList.cs" />
     <Compile Include="School.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>

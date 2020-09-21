@@ -31,9 +31,7 @@ namespace SMS_Service
                         // تغییر وضعیت تگ ها در مای اس کیوال
                         var resultMysql = MySqlClass.UpdateTagRecordList(listForDisableinMySql.Select(x => x.ID).ToList());
                         if (resultMysql)
-                        {
                             trans.Commit();
-                        }
                         else
                             trans.Rollback();
                     }

@@ -7,6 +7,22 @@ namespace SMS_Service
 {
     public class SMSSenderProcess
     {
+        private static void DubleTagRemover()
+        {
+            using (var dbr = new schooldbEntities())
+            {
+                var qry = dbr.TagRecorders.Where(x => x.SMS == false).ToList();//لیست ثبت های جدید
+                var list = qry.Select(x => x.TagID).ToList();//لیست تگ های 
+                var taglist = RemoverDuplicate.RemoveDuplicates(list);// تگ بدون تکرار
+                foreach (var item in taglist)
+                {
+                    foreach (var itemRec in qry)
+                    {
+  
+                    }
+                }
+            }
+        }
         /// <summary>
         /// جستجوی شناسه تگ
         /// </summary>
@@ -67,7 +83,7 @@ namespace SMS_Service
         /// <summary>
         /// پردازش و ارسال پیامک تردد
         /// </summary>
-        public void SMSSender()
+        public static void SMSSender()
         {
             using (var db = new schooldbEntities())
             {
@@ -76,7 +92,7 @@ namespace SMS_Service
                     //تمام ثبت های امروز
                     var qryDayRecorder =
                         db.TagRecorders.Where(x => x.DateTimeRegister.Year == DateTime.Now.Year && x.DateTimeRegister.Month == DateTime.Now.Month).ToList(); // تمام ثبت های امروز
-                    var tagList = qryDayRecorder.Select(x => x.TagID).ToList().RemoveDuplicates();  // لیست تگ های امروز بدون تکرار
+                    var tagList =RemoverDuplicate.RemoveDuplicates(qryDayRecorder.Select(x => x.TagID).ToList());  // لیست تگ های امروز بدون تکرار
                     foreach (var item in tagList.ToList()) // جدول بندی تردد ها بر اساس هر تگ که در عین حال فقط و فقط متعلق به یک دانش آموز است
                     {
                         var resultTAG_ID = FindTagID(item, db); // retrun ID
@@ -111,14 +127,14 @@ namespace SMS_Service
                                         Logger.WriteMessageLog("Input");
                                         if (tableTime.IsSendSMS == false)
                                             SendSMS.SendInput(tableTime.mobile, tableTime.FullName,
-                                                tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
+                                                    tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
                                     }
                                     else
                                     {
                                         Logger.WriteMessageLog("Output");
                                         if (tableTime.IsSendSMS == false)
-                                            SendSMS.SendOutput(tableTime.mobile, tableTime.FullName,
-                                                tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
+                                             SendSMS.SendOutput(tableTime.mobile, tableTime.FullName,
+                                                  tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
                                     }
                                 }
                             }

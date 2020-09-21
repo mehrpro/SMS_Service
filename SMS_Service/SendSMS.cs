@@ -6,17 +6,11 @@ using SmsIrRestful;
 namespace SMS_Service
 {
 
-  public static class SendSMS
+    public class SendSMS
     {
-        
-        /// <summary>
-        /// ارسال ورود دانش آموز 
-        /// </summary>
-        /// <param name="mobile">گیرنده پیامک</param>
-        /// <param name="fullName">نام کامل</param>
-        /// <param name="inDate">تاریخ وساعت</param>
-        /// <returns></returns>
-        public  static void SendInput(long mobile,string fullName,string inDate,int id)
+
+
+        public static void SendInput(long mobile, string fullName, string inDate, int id)
         {
             try
             {
@@ -32,10 +26,15 @@ namespace SMS_Service
                     }.ToArray()
                 };
                 Thread.Sleep(1000);
-                Logger.WriteMessageLog("1000 milisecond");
+                Logger.WriteMessageLog("Step Input 1");
                 UltraFastSendRespone ultraFastSendRespone = new UltraFast().Send(token, ultraFastSend);
-                if (ultraFastSendRespone.IsSuccessful)
+                Logger.WriteMessageLog(ultraFastSendRespone.Message);
+                Logger.WriteMessageLog(ultraFastSendRespone.VerificationCodeId.ToString());
+                Logger.WriteMessageLog("Step Input 2");
+              
+                if (Convert.ToBoolean(ultraFastSendRespone.IsSuccessful))
                 {
+                    Logger.WriteMessageLog("Step Input 3");
                     using (var dbx = new schooldbEntities())
                     {
                         var find = dbx.TagRecorders.Find(id);
@@ -44,20 +43,15 @@ namespace SMS_Service
                         Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send Input {mobile}" : $"Not Send Input {mobile}");
                     }
                 }
+                Logger.WriteMessageLog("Step Input 4");
             }
             catch (Exception e)
             {
                 Logger.WriteErrorLog(e);
             }
         }
-        /// <summary>
-        /// ارسال خروج دانش آموز
-        /// </summary>
-        /// <param name="mobile">گیرنده پیامک</param>
-        /// <param name="fullName">نام کامل</param>
-        /// <param name="inDate">تاریخ و ساعت</param>
-        /// <returns></returns>
-        public  static void SendOutput(long mobile, string fullName, string inDate,int id)
+
+        public static void SendOutput(long mobile, string fullName, string inDate, int id)
         {
             try
             {
@@ -73,11 +67,16 @@ namespace SMS_Service
                     }.ToArray()
 
                 };
-                Thread.Sleep(1000);
-                Logger.WriteMessageLog("1000 milisecond");
+          
+           
                 UltraFastSendRespone ultraFastSendRespone = new UltraFast().Send(token, ultraFastSend);
-                if (ultraFastSendRespone.IsSuccessful)
+                Logger.WriteMessageLog(ultraFastSendRespone.Message);
+                Logger.WriteMessageLog(ultraFastSendRespone.VerificationCodeId.ToString());
+                Logger.WriteMessageLog("Step Output 2");
+                Logger.WriteMessageLog(Convert.ToBoolean(ultraFastSendRespone.IsSuccessful).ToString());
+                if (Convert.ToBoolean(ultraFastSendRespone.IsSuccessful))
                 {
+                    Logger.WriteMessageLog("Step Output 3");
                     using (var dbx = new schooldbEntities())
                     {
                         var find = dbx.TagRecorders.Find(id);
@@ -86,6 +85,7 @@ namespace SMS_Service
                         Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send Input {mobile}" : $"Not Send Input {mobile}");
                     }
                 }
+                Logger.WriteMessageLog("Step Output 4");
             }
             catch (Exception e)
             {

@@ -11,15 +11,26 @@ namespace SMS_Service
         {
             using (var dbr = new schooldbEntities())
             {
-                var qry = dbr.TagRecorders.Where(x => x.SMS == false).ToList();//لیست ثبت های جدید
-                var list = qry.Select(x => x.TagID).ToList().RemoveDuplicates();//لیست تگ های 
-                //var taglist = list.RemoveDuplicates();// تگ بدون تکرار
-                foreach (var item in list)
+                var qry = dbr.TagRecorders.Where(x => x.SMS == false).Select(x => x.TagID).ToList().RemoveDuplicates();
+                while (dbr.TagRecorders.Count(x => x.SMS == false) > 1)// تگ های جدید
                 {
-                    var tagList = qry.Where(x => x.TagID == item && x.type == null).OrderBy(x => x.MysqlID).ToList();
-                    foreach (var lastTag in tagList)
+                    var select = dbr.TagRecorders.First(x => x.SMS == false && x.enables && x.type == null);// اولین تگ 
+                    var dtime = select.DateTimeRegister.AddSeconds(121);// بازه نهایی تگ
+                    foreach (var item in dbr.TagRecorders.Where(x=>x.TagID == select.TagID).ToList())// یافتن تگ های تکراری تا دو دقیقه بعد
                     {
-                        var result = 
+                        if(item.DateTimeRegister > select.DateTimeRegister && item.DateTimeRegister < dtime)
+                        {
+                            item.enables = false;
+                        }
+                    }
+                    var selectLast = dbr.TagRecorders.LastOrDefault(x => x.TagID == select.TagID && x.enables && x.type != null).type;
+                    if (select == null)
+                    {
+                        select.type = true;
+                    }
+                    else
+                    {
+                        select.type = !selectLast;
                     }
                 }
             }

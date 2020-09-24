@@ -93,6 +93,7 @@
           <Property Name="MysqlID" Type="int" Nullable="false" />
           <Property Name="SMS" Type="bit" Nullable="false" />
           <Property Name="type" Type="bit" />
+          <Property Name="enables" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Tags">
           <Key>
@@ -424,6 +425,7 @@
           <Property Name="MysqlID" Type="Int32" Nullable="false" />
           <Property Name="SMS" Type="Boolean" Nullable="false" />
           <Property Name="type" Type="Boolean" />
+          <Property Name="enables" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
@@ -624,6 +626,7 @@
           <EntitySetMapping Name="TagRecorders">
             <EntityTypeMapping TypeName="schooldbModel.TagRecorder">
               <MappingFragment StoreEntitySet="TagRecorder">
+                <ScalarProperty Name="enables" ColumnName="enables" />
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="SMS" ColumnName="SMS" />
                 <ScalarProperty Name="MysqlID" ColumnName="MysqlID" />

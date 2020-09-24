@@ -20,5 +20,6 @@ namespace SMS_Service
         public int MysqlID { get; set; }
         public bool SMS { get; set; }
         public Nullable<bool> type { get; set; }
+        public bool enables { get; set; }
     }
 }

@@ -72,6 +72,7 @@
           <Property Name="BrithDate" Type="date" Nullable="false" />
           <Property Name="RegDate" Type="datetime" Nullable="false" />
           <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="picture" Type="image" />
         </EntityType>
         <EntityType Name="StudentTAG">
           <Key>
@@ -91,6 +92,7 @@
           <Property Name="DateTimeRegister" Type="datetime" Nullable="false" />
           <Property Name="MysqlID" Type="int" Nullable="false" />
           <Property Name="SMS" Type="bit" Nullable="false" />
+          <Property Name="type" Type="bit" />
         </EntityType>
         <EntityType Name="Tags">
           <Key>
@@ -399,6 +401,7 @@
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Registereds" Relationship="schooldbModel.FK_Registered_Students" FromRole="Student" ToRole="Registered" />
           <NavigationProperty Name="StudentTAGs" Relationship="schooldbModel.FK_StudentTAG_Students" FromRole="Student" ToRole="StudentTAG" />
+          <Property Name="picture" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="StudentTAG">
           <Key>
@@ -420,6 +423,7 @@
           <Property Name="DateTimeRegister" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="MysqlID" Type="Int32" Nullable="false" />
           <Property Name="SMS" Type="Boolean" Nullable="false" />
+          <Property Name="type" Type="Boolean" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
@@ -588,6 +592,7 @@
           <EntitySetMapping Name="Students">
             <EntityTypeMapping TypeName="schooldbModel.Student">
               <MappingFragment StoreEntitySet="Students">
+                <ScalarProperty Name="picture" ColumnName="picture" />
                 <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="RegDate" ColumnName="RegDate" />
                 <ScalarProperty Name="BrithDate" ColumnName="BrithDate" />
@@ -619,6 +624,7 @@
           <EntitySetMapping Name="TagRecorders">
             <EntityTypeMapping TypeName="schooldbModel.TagRecorder">
               <MappingFragment StoreEntitySet="TagRecorder">
+                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="SMS" ColumnName="SMS" />
                 <ScalarProperty Name="MysqlID" ColumnName="MysqlID" />
                 <ScalarProperty Name="DateTimeRegister" ColumnName="DateTimeRegister" />

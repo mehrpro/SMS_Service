@@ -36,6 +36,7 @@ namespace SMS_Service
         public System.DateTime BrithDate { get; set; }
         public System.DateTime RegDate { get; set; }
         public bool Enabled { get; set; }
+        public byte[] picture { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registered> Registereds { get; set; }

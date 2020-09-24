@@ -12,13 +12,14 @@ namespace SMS_Service
             using (var dbr = new schooldbEntities())
             {
                 var qry = dbr.TagRecorders.Where(x => x.SMS == false).ToList();//لیست ثبت های جدید
-                var list = qry.Select(x => x.TagID).ToList();//لیست تگ های 
-                var taglist = RemoverDuplicate.RemoveDuplicates(list);// تگ بدون تکرار
-                foreach (var item in taglist)
+                var list = qry.Select(x => x.TagID).ToList().RemoveDuplicates();//لیست تگ های 
+                //var taglist = list.RemoveDuplicates();// تگ بدون تکرار
+                foreach (var item in list)
                 {
-                    foreach (var itemRec in qry)
+                    var tagList = qry.Where(x => x.TagID == item && x.type == null).OrderBy(x => x.MysqlID).ToList();
+                    foreach (var lastTag in tagList)
                     {
-  
+                        var result = 
                     }
                 }
             }
@@ -30,7 +31,6 @@ namespace SMS_Service
         /// <returns></returns>
         private static int FindTagID(string tag, schooldbEntities db)
         {
-
             var qry = db.Tags.FirstOrDefault(x => x.TagID_HEX == tag);
             if (qry == null)
             {
@@ -92,7 +92,7 @@ namespace SMS_Service
                     //تمام ثبت های امروز
                     var qryDayRecorder =
                         db.TagRecorders.Where(x => x.DateTimeRegister.Year == DateTime.Now.Year && x.DateTimeRegister.Month == DateTime.Now.Month).ToList(); // تمام ثبت های امروز
-                    var tagList =RemoverDuplicate.RemoveDuplicates(qryDayRecorder.Select(x => x.TagID).ToList());  // لیست تگ های امروز بدون تکرار
+                    var tagList = qryDayRecorder.Select(x => x.TagID).ToList().RemoveDuplicates();  // لیست تگ های امروز بدون تکرار
                     foreach (var item in tagList.ToList()) // جدول بندی تردد ها بر اساس هر تگ که در عین حال فقط و فقط متعلق به یک دانش آموز است
                     {
                         var resultTAG_ID = FindTagID(item, db); // retrun ID
@@ -124,17 +124,15 @@ namespace SMS_Service
                                 {
                                     if (tableTime.EvenODD % 2 == 0) //ورودی ها 
                                     {
-                                        Logger.WriteMessageLog("Input");
                                         if (tableTime.IsSendSMS == false)
                                             SendSMS.SendInput(tableTime.mobile, tableTime.FullName,
                                                     tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
                                     }
                                     else
                                     {
-                                        Logger.WriteMessageLog("Output");
                                         if (tableTime.IsSendSMS == false)
-                                             SendSMS.SendOutput(tableTime.mobile, tableTime.FullName,
-                                                  tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
+                                            SendSMS.SendOutput(tableTime.mobile, tableTime.FullName,
+                                                 tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
                                     }
                                 }
                             }
@@ -147,7 +145,6 @@ namespace SMS_Service
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteMessageLog("Error Catch");
                     Logger.WriteErrorLog(e);
                 }
             }

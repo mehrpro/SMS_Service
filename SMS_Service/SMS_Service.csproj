@@ -140,8 +140,6 @@
     <Compile Include="Registered.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RemoverDuplicate.cs" />
-    <Compile Include="RemoverList.cs" />
     <Compile Include="School.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>

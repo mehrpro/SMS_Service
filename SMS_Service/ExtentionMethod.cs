@@ -18,5 +18,9 @@ namespace SMS_Service
             var sec = pc.GetSecond(dt);
             return new DateTime(years, month, day,hou,minu,sec).ToString("yyyy/MM/dd hh:mm");
         }
+        public static List<T> RemoveDuplicates<T>(this List<T> items)
+        {
+            return (from s in items select s).Distinct().ToList();
+        }
     }
 }

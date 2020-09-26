@@ -30,8 +30,7 @@ namespace SMS_Service
                         }
                         dbx.SaveChanges();
                         // تغییر وضعیت تگ ها در مای اس کیوال
-                        var resultMysql = MySqlClass.UpdateTagRecordList(listForDisableinMySql.Select(x => x.ID).ToList());
-                        
+                        var resultMysql = MySqlClass.UpdateTagRecordList(listForDisableinMySql.Select(x => x.ID).ToList());                        
                         if (resultMysql)
                         {
                             SMSSenderProcess.TagFinder();

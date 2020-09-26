@@ -25,19 +25,26 @@ namespace SMS_Service
                                 DateTimeRegister = tagList.dateRegister,
                                 MysqlID = tagList.ID,
                                 SMS = false,
+                                type = Convert.ToBoolean(tagList.TypeImport),                                
                             });
                         }
                         dbx.SaveChanges();
                         // تغییر وضعیت تگ ها در مای اس کیوال
                         var resultMysql = MySqlClass.UpdateTagRecordList(listForDisableinMySql.Select(x => x.ID).ToList());
+                        
                         if (resultMysql)
+                        {
+                            SMSSenderProcess.TagFinder();
                             trans.Commit();
+                        }                            
                         else
-                            trans.Rollback();
+                             MySqlClass.rollbackTagRecordList(listForDisableinMySql.Select(x => x.ID).ToList());
+
                     }
                     catch (Exception e)
                     {
                         Logger.WriteErrorLog(e);
+
                         trans.Rollback();
                     }
                 }

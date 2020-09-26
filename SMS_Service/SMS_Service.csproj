@@ -173,7 +173,6 @@
     <Compile Include="TagRecorder.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="TAG_Regsters.cs" />
     <Compile Include="User.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>

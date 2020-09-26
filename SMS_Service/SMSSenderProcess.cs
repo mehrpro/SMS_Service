@@ -7,89 +7,101 @@ namespace SMS_Service
 {
     public class SMSSenderProcess
     {
-        private static void DubleTagRemover()
-        {
-            using (var dbr = new schooldbEntities())
-            {
-                var qry = dbr.TagRecorders.Where(x => x.SMS == false).Select(x => x.TagID).ToList().RemoveDuplicates();
-                while (dbr.TagRecorders.Count(x => x.SMS == false) > 1)// تگ های جدید
-                {
-                    var select = dbr.TagRecorders.First(x => x.SMS == false && x.enables && x.type == null);// اولین تگ 
-                    var dtime = select.DateTimeRegister.AddSeconds(121);// بازه نهایی تگ
-                    foreach (var item in dbr.TagRecorders.Where(x=>x.TagID == select.TagID).ToList())// یافتن تگ های تکراری تا دو دقیقه بعد
-                    {
-                        if(item.DateTimeRegister > select.DateTimeRegister && item.DateTimeRegister < dtime)
-                        {
-                            item.enables = false;
-                        }
-                    }
-                    var selectLast = dbr.TagRecorders.LastOrDefault(x => x.TagID == select.TagID && x.enables && x.type != null).type;
-                    if (select == null)
-                    {
-                        select.type = true;
-                    }
-                    else
-                    {
-                        select.type = !selectLast;
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// جستجوی شناسه تگ
-        /// </summary>
-        /// <param name="tag">تگ</param>
-        /// <returns></returns>
-        private static int FindTagID(string tag, schooldbEntities db)
-        {
-            var qry = db.Tags.FirstOrDefault(x => x.TagID_HEX == tag);
-            if (qry == null)
-            {
 
-                using (var trans = db.Database.BeginTransaction())
+        ///// <summary>
+        ///// حذف موارد تکراری و تعیین وضعیت ثبت های جدید در بانک
+        ///// </summary>
+        //public static void DubleTagRemover()
+        //{
+        //    using (var dbr = new schooldbEntities())
+        //    {
+        //        while (dbr.TagRecorders.Count(x => x.SMS == false && x.enables && x.type) > 1)// تگ های جدید
+        //        {
+        //            var qry = dbr.TagRecorders.Where(x => x.SMS == false && x.enables).ToList();
+
+        //            var select = dbr.TagRecorders.First(x => x.SMS == false && x.enables && x.type == null);// اولین تگ 
+        //            var dtime = select.DateTimeRegister.AddSeconds(121);// بازه نهایی تگ
+        //            foreach (var item in dbr.TagRecorders.Where(x => x.TagID == select.TagID).ToList())// یافتن تگ های تکراری تا دو دقیقه بعد
+        //            {
+        //                if (item.DateTimeRegister > select.DateTimeRegister && item.DateTimeRegister < dtime)
+        //                {
+        //                    item.enables = false;
+        //                }
+        //            }
+        //            var emroz = dbr.TagRecorders.Where(x =>
+        //            x.DateTimeRegister.Year == DateTime.Now.Year &&
+        //            x.DateTimeRegister.Month == DateTime.Now.Month &&
+        //            x.DateTimeRegister.Day == DateTime.Now.Day).ToList();
+        //            var selectLast = emroz.LastOrDefault(x => x.TagID == select.TagID && x.enables && x.type != null).type;//یافتن آخرین وضعیت ارسالی
+        //            if (selectLast == null)
+        //            {
+        //                select.type = true;// اولین ورود
+        //            }
+        //            else
+        //            {
+        //                select.type = !selectLast;
+        //            }
+        //        }
+        //    }
+        //}
+        /// <summary>
+        /// جستجوی  تگ های جدید و حذف ثبت های بی مورد
+        /// </summary>
+        /// <returns></returns>
+        public static bool TagFinder()
+        {
+            using (var dbTag = new schooldbEntities())
+            {
+                using (var trans = dbTag.Database.BeginTransaction())
                 {
                     try
                     {
-                        var newTag = new Tag
+                        var masterQuery = dbTag.TagRecorders.Where(x => x.enables).ToList();
+                        var qry = masterQuery.Where(x => x.SMS == false).Select(x => x.TagID).ToList().RemoveDuplicates();
+                        foreach (var item in qry)
                         {
-                            TagID_HEX = tag,
-                        };
-                        db.Tags.Add(newTag);
-                        db.SaveChanges();
-                        var remove = db.TagRecorders.Where(x => x.TagID == tag).ToList();
-                        db.TagRecorders.RemoveRange(remove);
-                        db.SaveChanges();
-                        trans.Commit();
-                        Logger.WriteMessageLog($"Save New TAG : {newTag.TagID_HEX}");
-                        return newTag.ID;
-                    }
-                    catch
-                    {
-                        Logger.WriteMessageLog($"Error In FindTagID ");
-                        return 0;
-                    }
-                }
+                            var tag = dbTag.Tags.Any(x => x.TagID_HEX == item);// تگ قبلا ثبت شده است
+                            if (tag)
+                            {// قبلا ثبت شده
+                                var tagID_FK = dbTag.Tags.First(x => x.TagID_HEX == item).ID;
 
+                                var tagUsed = dbTag.StudentTAGs.Any(x => x.Tag.TagID_HEX == item);// تگ مورد استفاده دانش آموز است؟
+                                if (!tagUsed)// تگ خام است
+                                {
+                                    var remove = dbTag.TagRecorders.Where(x => x.TagID == item).ToList();
+                                    dbTag.TagRecorders.RemoveRange(remove);
+                                    dbTag.SaveChanges();
+                                }
+                                else
+                                {
+                                    foreach (var noTagID_FK in masterQuery.Where(x => x.TagID == item))
+                                    {
+                                        noTagID_FK.TagID_FK = tagID_FK;
+                                        dbTag.SaveChanges();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                dbTag.Tags.Add(new Tag() { TagID_HEX = item });// تگ را اضافه میکند
+                                var remove = dbTag.TagRecorders.Where(x => x.TagID == item).ToList();
+                                dbTag.TagRecorders.RemoveRange(remove);
+                                dbTag.SaveChanges();
+                                Logger.WriteMessageLog($"Save New TAG : {item}");
+                            }
+                        }
+                        trans.Commit();
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.WriteErrorLog(e);
+                        return false;
+                    }
+
+                }
             }
-            return qry.ID;
-        }
-        /// <summary>
-        /// تگ فعال است؟
-        /// </summary>
-        /// <param name="id">شناسه تگ</param>
-        /// <returns></returns>
-        private static bool FindTagIN_StudentTAG(int id, schooldbEntities db)
-        {
-            return db.StudentTAGs.Any(x => x.TagID_FK == id && x.Enabled);
-        }
-        /// <summary>
-        /// شناسه دانش آموز  
-        /// </summary>
-        /// <param name="id">شناسه تگ</param>
-        /// <returns></returns>
-        private static int FindStudentIDByTagID(int id, schooldbEntities db)
-        {
-            return db.StudentTAGs.Single(x => x.TagID_FK == id && x.Enabled).Student_FK;
+
         }
         /// <summary>
         /// پردازش و ارسال پیامک تردد
@@ -102,55 +114,55 @@ namespace SMS_Service
                 {
                     //تمام ثبت های امروز
                     var qryDayRecorder =
-                        db.TagRecorders.Where(x => x.DateTimeRegister.Year == DateTime.Now.Year && x.DateTimeRegister.Month == DateTime.Now.Month).ToList(); // تمام ثبت های امروز
-                    var tagList = qryDayRecorder.Select(x => x.TagID).ToList().RemoveDuplicates();  // لیست تگ های امروز بدون تکرار
-                    foreach (var item in tagList.ToList()) // جدول بندی تردد ها بر اساس هر تگ که در عین حال فقط و فقط متعلق به یک دانش آموز است
+                        db.TagRecorders.Where(x =>
+                        x.DateTimeRegister.Year == DateTime.Now.Year &&
+                        x.DateTimeRegister.Month == DateTime.Now.Month &&
+                        x.DateTimeRegister.Day == DateTime.Now.Day && x.SMS == false && x.enables).ToList(); // تمام ثبت های امروز
+                    foreach (var item in qryDayRecorder) // جدول بندی تردد ها بر اساس هر تگ که در عین حال فقط و فقط متعلق به یک دانش آموز است
                     {
-                        var resultTAG_ID = FindTagID(item, db); // retrun ID
-                        if (FindTagIN_StudentTAG(resultTAG_ID, db))          // آیا این تگ  قابل استفاده است
+                        var student = db.StudentTAGs.Single(x => x.Tag.TagID_HEX == item.TagID);// شناسه تگ
+                        try
                         {
-                            var studentID = FindStudentIDByTagID(resultTAG_ID, db); // StudentID
-                            var table = new List<TableTime>();
-                            var counter = 0;
-                            foreach (var tagItem in qryDayRecorder.Where(x => x.TagID == item).OrderBy(x => x.MysqlID)
-                                .ToList()) //ساخت جدول تردد
+                            if (item.type) //ورودی ها 
                             {
-                                var stu = db.Students.Find(studentID);
-                                var sms = Convert.ToInt64(stu.SMS);
-                                table.Add(new TableTime
+                                var finder = db.TagRecorders.Any(x => 
+                                x.TagID_FK == item.TagID_FK &&
+                                x.DateTimeRegister > item.DateTimeRegister.AddSeconds(-300) &&
+                                x.SMS &&
+                                x.type && 
+                                x.enables);
+                                if (finder)
                                 {
-                                    ID = tagItem.ID,
-                                    EvenODD = counter++,
-                                    TagID = resultTAG_ID,
-                                    DateRecord = tagItem.DateTimeRegister,
-                                    MySQLID = tagItem.MysqlID,
-                                    IsSendSMS = tagItem.SMS,
-                                    FullName = stu.FullName,
-                                    mobile = sms,
-                                });
-                            }
-                            try
-                            {
-                                foreach (var tableTime in table) //ارسال پیام تردد
-                                {
-                                    if (tableTime.EvenODD % 2 == 0) //ورودی ها 
-                                    {
-                                        if (tableTime.IsSendSMS == false)
-                                            SendSMS.SendInput(tableTime.mobile, tableTime.FullName,
-                                                    tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
-                                    }
-                                    else
-                                    {
-                                        if (tableTime.IsSendSMS == false)
-                                            SendSMS.SendOutput(tableTime.mobile, tableTime.FullName,
-                                                 tableTime.DateRecord.Convert_PersianCalender(), tableTime.ID); //ارسال
-                                    }
+                                    item.SMS = true;
+                                    item.enables = false;
+                                    db.SaveChanges();
                                 }
+                                else
+                                    SendSMS.SendInput(Convert.ToInt64(student.Student.SMS), student.Student.FullName,
+                                        item.DateTimeRegister.Convert_PersianCalender(), item.ID); //ارسال
                             }
-                            catch (Exception e)
+                            else
                             {
-                                Logger.WriteErrorLog(e);
+                                var finder = db.TagRecorders.Any(x =>
+                                x.TagID_FK == item.TagID_FK &&
+                                x.DateTimeRegister > item.DateTimeRegister.AddSeconds(-300) &&
+                                x.SMS &&
+                                x.type == false &&
+                                x.enables);
+                                if (finder)
+                                {
+                                    item.SMS = true;
+                                    item.enables = false;
+                                    db.SaveChanges();
+                                }
+                                else
+                                    SendSMS.SendOutput(Convert.ToInt64(student.Student.SMS), student.Student.FullName,
+                                        item.DateTimeRegister.Convert_PersianCalender(), item.ID); ; //ارسال
                             }
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.WriteErrorLog(e);
                         }
                     }
                 }
@@ -160,21 +172,5 @@ namespace SMS_Service
                 }
             }
         }
-    }
-    /// <summary>
-    /// جدول تردد
-    /// </summary>
-    internal class TableTime
-    {
-        public int ID { get; set; }
-        public int EvenODD { get; set; }
-        public int TagID { get; set; }
-        public DateTime DateRecord { get; set; }
-        public int MySQLID { get; set; }
-        public string FullName { get; set; }
-        public bool IsSendSMS { get; set; }
-        public long mobile { get; set; }
-
-
     }
 }

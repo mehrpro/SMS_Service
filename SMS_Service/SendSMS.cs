@@ -61,7 +61,7 @@ namespace SMS_Service
                         var find = dbx.TagRecorders.Find(id);
                         find.SMS = true;
                         var resultSave = dbx.SaveChanges();
-                        Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send Input {mobile}" : $"Not Send Input {mobile}");
+                        Logger.WriteMessageSenderLog(Convert.ToBoolean(resultSave) ? $"Send output {mobile}" : $"Not Send output {mobile}");
                     }
                 }
             }

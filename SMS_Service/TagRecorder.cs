@@ -19,7 +19,8 @@ namespace SMS_Service
         public System.DateTime DateTimeRegister { get; set; }
         public int MysqlID { get; set; }
         public bool SMS { get; set; }
-        public Nullable<bool> type { get; set; }
+        public bool type { get; set; }
         public bool enables { get; set; }
+        public Nullable<int> TagID_FK { get; set; }
     }
 }

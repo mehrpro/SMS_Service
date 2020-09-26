@@ -92,8 +92,9 @@
           <Property Name="DateTimeRegister" Type="datetime" Nullable="false" />
           <Property Name="MysqlID" Type="int" Nullable="false" />
           <Property Name="SMS" Type="bit" Nullable="false" />
-          <Property Name="type" Type="bit" />
+          <Property Name="type" Type="bit" Nullable="false" />
           <Property Name="enables" Type="bit" Nullable="false" />
+          <Property Name="TagID_FK" Type="int" />
         </EntityType>
         <EntityType Name="Tags">
           <Key>
@@ -400,9 +401,9 @@
           <Property Name="BrithDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="RegDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="picture" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Registereds" Relationship="schooldbModel.FK_Registered_Students" FromRole="Student" ToRole="Registered" />
           <NavigationProperty Name="StudentTAGs" Relationship="schooldbModel.FK_StudentTAG_Students" FromRole="Student" ToRole="StudentTAG" />
-          <Property Name="picture" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="StudentTAG">
           <Key>
@@ -424,8 +425,9 @@
           <Property Name="DateTimeRegister" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="MysqlID" Type="Int32" Nullable="false" />
           <Property Name="SMS" Type="Boolean" Nullable="false" />
-          <Property Name="type" Type="Boolean" />
+          <Property Name="type" Type="Boolean" Nullable="false" />
           <Property Name="enables" Type="Boolean" Nullable="false" />
+          <Property Name="TagID_FK" Type="Int32" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
@@ -626,6 +628,7 @@
           <EntitySetMapping Name="TagRecorders">
             <EntityTypeMapping TypeName="schooldbModel.TagRecorder">
               <MappingFragment StoreEntitySet="TagRecorder">
+                <ScalarProperty Name="TagID_FK" ColumnName="TagID_FK" />
                 <ScalarProperty Name="enables" ColumnName="enables" />
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="SMS" ColumnName="SMS" />

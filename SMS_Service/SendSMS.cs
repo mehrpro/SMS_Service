@@ -35,7 +35,7 @@ namespace SMS_Service
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLog(e);
+                Logger.WriteErrorLog(e, "SendInput");
             }
         }
         public static void SendOutput(long mobile, string fullName, string inDate, int id)
@@ -67,7 +67,7 @@ namespace SMS_Service
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLog(e);
+                Logger.WriteErrorLog(e, "SendOutput");
             }
         }
     }

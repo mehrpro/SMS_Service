@@ -10,6 +10,7 @@ namespace SMS_Service
         public int ID { get; set; }
         public string Tag { get; set; }
         public DateTime dateRegister { get; set; }
-        public byte TypeImport { get; set; }
+        public int Reg { get; set; }
+        public int TypeImport { get; set; }
     }
 }

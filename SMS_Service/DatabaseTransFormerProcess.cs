@@ -21,29 +21,33 @@ namespace SMS_Service
                         {
                             dbx.TagRecorders.Add(new TagRecorder()
                             {
-                                TagID = tagList.Tag,
+                                TagID = tagList.Tag.Remove(tagList.Tag.Length -1),
                                 DateTimeRegister = tagList.dateRegister,
                                 MysqlID = tagList.ID,
                                 SMS = false,
-                                type = Convert.ToBoolean(tagList.TypeImport),                                
+                                type = Convert.ToBoolean(tagList.TypeImport),
+                                enables = true,
                             });
                         }
                         dbx.SaveChanges();
-                        // تغییر وضعیت تگ ها در مای اس کیوال
-                        var resultMysql = MySqlClass.UpdateTagRecordList(listForDisableinMySql.Select(x => x.ID).ToList());                        
+                        var resultMysql = MySqlClass.UpdateTagRecordList(listForDisableinMySql.Select(x => x.ID).ToList());
                         if (resultMysql)
                         {
-                            SMSSenderProcess.TagFinder();
-                            trans.Commit();
-                        }                            
-                        else
-                             MySqlClass.rollbackTagRecordList(listForDisableinMySql.Select(x => x.ID).ToList());
 
+                            trans.Commit();
+                        }
+                        else
+                        {
+                            MySqlClass.rollbackTagRecordList(listForDisableinMySql.Select(x => x.ID).ToList());
+                            Logger.WriteMessageLog("Error TransformDataBase");
+                            trans.Rollback();
+
+                        }
+                            
                     }
                     catch (Exception e)
                     {
-                        Logger.WriteErrorLog(e);
-
+                        Logger.WriteErrorLog(e, "TransformDataBase");
                         trans.Rollback();
                     }
                 }

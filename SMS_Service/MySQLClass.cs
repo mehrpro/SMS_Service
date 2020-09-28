@@ -13,7 +13,7 @@ namespace SMS_Service
         /// <returns></returns>
         public static bool UpdateTagRecord(int id)
         {
-            string cs = @"server=localhost;port=3306;userid=fm;password=Ss987654;database=schooldb;SSL Mode = None";
+            string cs = @"server=localhost;port=3306;userid=ard;password=Ss987654;database=schooldb;SSL Mode = None";
             using (var conn = new MySqlConnection(cs))
             {
                 try
@@ -25,8 +25,9 @@ namespace SMS_Service
                     conn.Clone();
                     return Convert.ToBoolean(result);
                 }
-                catch
+                catch (Exception e)
                 {
+                    Logger.WriteErrorLog(e, "UpdateTagRecord");
                     conn.Clone();
                     return false;
                 }
@@ -38,14 +39,14 @@ namespace SMS_Service
         /// <returns></returns>
         public static List<View_TagList> ReaderSQL()
         {
-            string cs = @"server=localhost;port=3306;userid=fm;password=Ss987654;database=schooldb;SSL Mode = None";
+            string cs = @"server=localhost;port=3306;userid=ard;password=Ss987654;database=schooldb;SSL Mode = None";
             var list = new List<View_TagList>();
             using (var conn = new MySqlConnection(cs))
             {
                 try
                 {
                     conn.Open();
-                    var cmdString = "SELECT * FROM schooldb.tagrecive where registered = 1";
+                    var cmdString = "SELECT * FROM schooldb.tagrecive where Registered = '1'";
                     var cmd = new MySqlCommand(cmdString, conn);
                     var result = cmd.ExecuteReader();
                     while (result.Read())
@@ -55,14 +56,16 @@ namespace SMS_Service
                             ID = result.GetInt32(0),
                             Tag = result.GetString(1),
                             dateRegister = result.GetDateTime(2),
-                            TypeImport = result.GetByte(4),
+                            Reg = result.GetInt32(3),
+                            TypeImport = result.GetInt32(4),
                         });
                     }
                     conn.Clone();
                     return list;
                 }
-                catch
+                catch (Exception e)
                 {
+                    Logger.WriteErrorLog(e, "ReaderSQL");
                     conn.Clone();
                     return null;
                 }
@@ -75,7 +78,7 @@ namespace SMS_Service
         /// <returns></returns>
         public static bool UpdateTagRecordList(List<int> listDisabel)
         {
-            string cs = @"server=localhost;port=3306;userid=fm;password=Ss987654;database=schooldb;SSL Mode = None";
+            string cs = @"server=localhost;port=3306;userid=ard;password=Ss987654;database=schooldb;SSL Mode = None";
             using (var conn = new MySqlConnection(cs))
             {
                 try
@@ -90,8 +93,9 @@ namespace SMS_Service
                     conn.Clone();
                     return true;
                 }
-                catch
+                catch (Exception e)
                 {
+                    Logger.WriteErrorLog(e, "UpdateTagRecordList");
                     conn.Clone();
                     return false;
                 }
@@ -104,7 +108,7 @@ namespace SMS_Service
         /// <returns></returns>
         public static bool rollbackTagRecordList(List<int> listDisabel)
         {
-            string cs = @"server=localhost;port=3306;userid=fm;password=Ss987654;database=schooldb;SSL Mode = None";
+            string cs = @"server=localhost;port=3306;userid=ard;password=Ss987654;database=schooldb;SSL Mode = None";
             using (var conn = new MySqlConnection(cs))
             {
                 try
@@ -119,8 +123,9 @@ namespace SMS_Service
                     conn.Clone();
                     return true;
                 }
-                catch
+                catch (Exception e)
                 {
+                    Logger.WriteErrorLog(e, "rollbackTagRecordList");
                     conn.Clone();
                     return false;
                 }

@@ -9,13 +9,13 @@ namespace SMS_Service
         /// ثبت خطاهای سرویس
         /// </summary>
         /// <param name="ex">خطا</param>
-        public static void WriteErrorLog(Exception ex)
+        public static void WriteErrorLog(Exception ex,string partName)
         {
             StreamWriter sw = null;
             try
             {
                 sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "\\LogFile.txt", true);
-                sw.WriteLine(DateTime.Now + ": " + ex.Source.Trim() + "; " +
+                sw.WriteLine(partName +": "+ DateTime.Now + ": " + ex.Source.Trim() + "; " +
                                        ex.Message.Trim());
                 sw.Flush();
                 sw.Close();

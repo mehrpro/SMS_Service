@@ -24,6 +24,7 @@ namespace SMS_Service
         public string TagID_HEX { get; set; }
         public bool Enabled { get; set; }
         public bool DeleteTAG { get; set; }
+        public string CartView { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentTAG> StudentTAGs { get; set; }

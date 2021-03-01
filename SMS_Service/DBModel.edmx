@@ -95,6 +95,7 @@
           <Property Name="type" Type="bit" Nullable="false" />
           <Property Name="enables" Type="bit" Nullable="false" />
           <Property Name="TagID_FK" Type="int" />
+          <Property Name="StudentID_FK" Type="int" />
         </EntityType>
         <EntityType Name="Tags">
           <Key>
@@ -104,6 +105,7 @@
           <Property Name="TagID_HEX" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Enabled" Type="bit" Nullable="false" />
           <Property Name="DeleteTAG" Type="bit" Nullable="false" />
+          <Property Name="CartView" Type="char" MaxLength="10" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -428,6 +430,7 @@
           <Property Name="type" Type="Boolean" Nullable="false" />
           <Property Name="enables" Type="Boolean" Nullable="false" />
           <Property Name="TagID_FK" Type="Int32" />
+          <Property Name="StudentID_FK" Type="Int32" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
@@ -437,6 +440,7 @@
           <Property Name="TagID_HEX" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <Property Name="DeleteTAG" Type="Boolean" Nullable="false" />
+          <Property Name="CartView" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="StudentTAGs" Relationship="schooldbModel.FK_StudentTAG_Tags" FromRole="Tag" ToRole="StudentTAG" />
         </EntityType>
         <EntityType Name="User">
@@ -628,6 +632,7 @@
           <EntitySetMapping Name="TagRecorders">
             <EntityTypeMapping TypeName="schooldbModel.TagRecorder">
               <MappingFragment StoreEntitySet="TagRecorder">
+                <ScalarProperty Name="StudentID_FK" ColumnName="StudentID_FK" />
                 <ScalarProperty Name="TagID_FK" ColumnName="TagID_FK" />
                 <ScalarProperty Name="enables" ColumnName="enables" />
                 <ScalarProperty Name="type" ColumnName="type" />
@@ -642,6 +647,7 @@
           <EntitySetMapping Name="Tags">
             <EntityTypeMapping TypeName="schooldbModel.Tag">
               <MappingFragment StoreEntitySet="Tags">
+                <ScalarProperty Name="CartView" ColumnName="CartView" />
                 <ScalarProperty Name="DeleteTAG" ColumnName="DeleteTAG" />
                 <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="TagID_HEX" ColumnName="TagID_HEX" />

@@ -22,5 +22,6 @@ namespace SMS_Service
         public bool type { get; set; }
         public bool enables { get; set; }
         public Nullable<int> TagID_FK { get; set; }
+        public Nullable<int> StudentID_FK { get; set; }
     }
 }

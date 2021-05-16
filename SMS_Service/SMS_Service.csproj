@@ -107,6 +107,9 @@
     <Compile Include="AcademicYear.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="BirthRegister.cs">
+      <DependentUpon>DBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ClassLevel.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -129,6 +132,10 @@
       <DependentUpon>DBModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="ExtentionMethod.cs" />
+    <Compile Include="Infrastructure\IRepository.cs" />
+    <Compile Include="Infrastructure\IUnitOFWork.cs" />
+    <Compile Include="Infrastructure\Repository.cs" />
+    <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MySQLClass.cs" />
     <Compile Include="ProjectInstaller.cs">
@@ -140,6 +147,8 @@
     <Compile Include="Registered.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\IBirthDay.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="School.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -221,6 +230,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

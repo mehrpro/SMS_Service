@@ -8,6 +8,10 @@ namespace SMS_Service
 
     public class SMSSenderProcess
     {
+
+        #region NewTags
+
+
         /// <summary>
         /// یافتن تگ های جدید و افزودن به بانک اطلاعاتی
         /// </summary>
@@ -42,6 +46,12 @@ namespace SMS_Service
             }
 
         }
+        #endregion
+
+
+
+        #region HexToDecimal
+
         private static string HexToDecimal(string tagHex)
         {
             var hexValue = tagHex.Remove(0, 2).Remove(8);
@@ -49,6 +59,12 @@ namespace SMS_Service
             var str = decValue.ToString("0000000000");
             return str;
         }
+
+        #endregion
+
+
+        #region UpdateTagID
+
         /// <summary>
         /// حذف تگ های خام و بروزرسانی شناسه تگ ها
         /// </summary>
@@ -94,6 +110,12 @@ namespace SMS_Service
                 }
             }
         }
+
+        #endregion
+
+
+        #region SMSSender
+
         /// <summary>
         /// پردازش و ارسال پیامک تردد
         /// </summary>
@@ -162,5 +184,81 @@ namespace SMS_Service
                 }
             }
         }
+
+        #endregion
+
+
+        #region BirthDay
+        public static void SMSSenderBirthDay()
+        {
+
+            using (var db = new schooldbEntities())
+            {
+                try
+                {
+                    //تمام ثبت های امروز
+                    var qryDayRecorder = db.TagRecorders.
+                        Where(x => x.SMS == false && x.enables && x.StudentID_FK > 0 && x.TagID_FK > 0).ToList(); // تمام ثبت های امروز
+                    foreach (var item in qryDayRecorder) // جدول بندی تردد ها بر اساس هر تگ که در عین حال فقط و فقط متعلق به یک دانش آموز است
+                    {
+                        var student = db.Students.Find(item.StudentID_FK.Value);
+                        try
+                        {
+                            if (item.type) //ورودی ها 
+                            {
+                                var dat = item.DateTimeRegister.AddSeconds(-120);
+                                var finder = db.TagRecorders.Any(x =>
+                                x.TagID_FK == item.TagID_FK &&
+                                x.DateTimeRegister > dat &&
+                                x.SMS &&
+                                x.type &&
+                                x.enables);
+                                if (finder)
+                                {
+                                    item.SMS = true;
+                                    item.enables = false;
+                                    db.SaveChanges();
+                                }
+                                else
+                                    SendSMS.SendInput(Convert.ToInt64(student.SMS), student.FullName,
+                                        item.DateTimeRegister.Convert_PersianCalender(), item.ID); //ارسال
+                            }
+                            else
+                            {
+                                var dat = item.DateTimeRegister.AddSeconds(-120);
+                                var finder = db.TagRecorders.Any(x =>
+                                x.TagID_FK == item.TagID_FK &&
+                                x.DateTimeRegister > dat &&
+                                x.SMS &&
+                                x.type == false &&
+                                x.enables);
+                                if (finder)
+                                {
+                                    item.SMS = true;
+                                    item.enables = false;
+                                    db.SaveChanges();
+                                }
+                                else
+                                    SendSMS.SendOutput(Convert.ToInt64(student.SMS), student.FullName,
+                                        item.DateTimeRegister.Convert_PersianCalender(), item.ID); ; //ارسال
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.WriteErrorLog(e, "ForEach SMSSender");
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.WriteErrorLog(e, "SMSSender");
+                }
+            }
+        }
+
+        #endregion
+
+
+
     }
 }

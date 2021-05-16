@@ -16,6 +16,14 @@
           <Property Name="enabled" Type="bit" Nullable="false" />
           <Property Name="description" Type="nvarchar" MaxLength="300" />
         </EntityType>
+        <EntityType Name="BirthRegister">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentID_FK" Type="int" Nullable="false" />
+          <Property Name="Registered" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="ClassLevels">
           <Key>
             <PropertyRef Name="ID" />
@@ -118,6 +126,18 @@
           <Property Name="Mobile" Type="char" MaxLength="12" Nullable="false" />
           <Property Name="Password" Type="char" MaxLength="120" Nullable="false" />
         </EntityType>
+        <Association Name="FK_BirthRegister_Students">
+          <End Role="Students" Type="Self.Students" Multiplicity="1" />
+          <End Role="BirthRegister" Type="Self.BirthRegister" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BirthRegister">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ClassRooms_ClassLevels">
           <End Role="ClassLevels" Type="Self.ClassLevels" Multiplicity="1" />
           <End Role="ClassRooms" Type="Self.ClassRooms" Multiplicity="*" />
@@ -204,6 +224,7 @@
         </Association>
         <EntityContainer Name="schooldbModelStoreContainer">
           <EntitySet Name="AcademicYears" EntityType="Self.AcademicYears" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BirthRegister" EntityType="Self.BirthRegister" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClassLevels" EntityType="Self.ClassLevels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClassRooms" EntityType="Self.ClassRooms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Registered" EntityType="Self.Registered" Schema="dbo" store:Type="Tables" />
@@ -213,6 +234,10 @@
           <EntitySet Name="TagRecorder" EntityType="Self.TagRecorder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tags" EntityType="Self.Tags" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_BirthRegister_Students" Association="Self.FK_BirthRegister_Students">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="BirthRegister" EntitySet="BirthRegister" />
+          </AssociationSet>
           <AssociationSet Name="FK_ClassRooms_ClassLevels" Association="Self.FK_ClassRooms_ClassLevels">
             <End Role="ClassLevels" EntitySet="ClassLevels" />
             <End Role="ClassRooms" EntitySet="ClassRooms" />
@@ -315,6 +340,11 @@
             <End Role="Tag" EntitySet="Tags" />
             <End Role="StudentTAG" EntitySet="StudentTAGs" />
           </AssociationSet>
+          <EntitySet Name="BirthRegisters" EntityType="schooldbModel.BirthRegister" />
+          <AssociationSet Name="FK_BirthRegister_Students" Association="schooldbModel.FK_BirthRegister_Students">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="BirthRegister" EntitySet="BirthRegisters" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -406,6 +436,7 @@
           <Property Name="picture" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Registereds" Relationship="schooldbModel.FK_Registered_Students" FromRole="Student" ToRole="Registered" />
           <NavigationProperty Name="StudentTAGs" Relationship="schooldbModel.FK_StudentTAG_Students" FromRole="Student" ToRole="StudentTAG" />
+          <NavigationProperty Name="BirthRegister" Relationship="schooldbModel.FK_BirthRegister_Students" FromRole="Student" ToRole="BirthRegister" />
         </EntityType>
         <EntityType Name="StudentTAG">
           <Key>
@@ -538,6 +569,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="BirthRegister">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudentID_FK" Type="Int32" Nullable="false" />
+          <Property Name="Registered" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Student" Relationship="schooldbModel.FK_BirthRegister_Students" FromRole="BirthRegister" ToRole="Student" />
+        </EntityType>
+        <Association Name="FK_BirthRegister_Students">
+          <End Type="schooldbModel.Student" Role="Student" Multiplicity="1" />
+          <End Type="schooldbModel.BirthRegister" Role="BirthRegister" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BirthRegister">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -663,6 +715,15 @@
                 <ScalarProperty Name="LName" ColumnName="LName" />
                 <ScalarProperty Name="FName" ColumnName="FName" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BirthRegisters">
+            <EntityTypeMapping TypeName="schooldbModel.BirthRegister">
+              <MappingFragment StoreEntitySet="BirthRegister">
+                <ScalarProperty Name="Registered" ColumnName="Registered" />
+                <ScalarProperty Name="StudentID_FK" ColumnName="StudentID_FK" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

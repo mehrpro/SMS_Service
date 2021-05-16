@@ -42,5 +42,6 @@ namespace SMS_Service
         public virtual ICollection<Registered> Registereds { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentTAG> StudentTAGs { get; set; }
+        public virtual BirthRegister BirthRegister { get; set; }
     }
 }

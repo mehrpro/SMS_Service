@@ -22,6 +22,8 @@
         <AssociationConnector Association="schooldbModel.FK_Registered_Students" />
         <AssociationConnector Association="schooldbModel.FK_StudentTAG_Students" />
         <AssociationConnector Association="schooldbModel.FK_StudentTAG_Tags" />
+        <EntityTypeShape EntityType="schooldbModel.BirthRegister" Width="1.5" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="schooldbModel.FK_BirthRegister_Students" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

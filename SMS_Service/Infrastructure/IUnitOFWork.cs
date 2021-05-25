@@ -9,7 +9,7 @@ namespace SMS_Service.Infrastructure
     {
         //1-Begin TransAction  2-Commit(SaveChange) 3-RollBack
         UserRepository UserRepository { get; } //Read Only
-        IBirthDay BirthDay { get; }//Read Only
+        BirthDay BirthDay { get; }//Read Only
         void Commit();
         Task<int> CommitAsync();
 

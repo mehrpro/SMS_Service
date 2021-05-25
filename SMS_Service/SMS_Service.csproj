@@ -147,7 +147,7 @@
     <Compile Include="Registered.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\IBirthDay.cs" />
+    <Compile Include="Repositories\BirthDay.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="School.cs">
       <DependentUpon>DBModel.tt</DependentUpon>

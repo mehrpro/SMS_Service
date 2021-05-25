@@ -38,7 +38,7 @@ namespace SMS_Service.Infrastructure
 
         #region Repositories
         private UserRepository userRepository;
-        private IBirthDay _birthDay;
+        private BirthDay _birthDay;
 
         public UserRepository UserRepository
         {
@@ -52,7 +52,7 @@ namespace SMS_Service.Infrastructure
             }
         }
 
-        public IBirthDay BirthDay
+        public BirthDay BirthDay
         {
             get
             {
